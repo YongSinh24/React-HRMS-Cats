@@ -16,14 +16,13 @@ import {
   Upload,
 } from "antd";
 import { request } from "../../../share/request";
-import { PlusOutlined, InboxOutlined } from "@ant-design/icons";
+import { InboxOutlined } from "@ant-design/icons";
 import Swal from "sweetalert2";
 import { isEmptyOrNull } from "../../../share/helper";
 import dayjs from "dayjs";
 const { TextArea } = Input;
 const { Title } = Typography;
 const { Dragger } = Upload;
-
 const picture = require("../../../asset/image/missing-picture.jpg");
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -32,49 +31,39 @@ const getBase64 = (file) =>
     reader.onload = () => resolve(reader.result);
     reader.onerror = (error) => reject(error);
   });
-
-const PersonalDetailForm = () => {
+const PersonalDetailForm = ({ id }) => {
   const [form] = Form.useForm();
   const [department, setDepartment] = useState([]);
   const [position, setPosition] = useState([]);
   const [position2, setPosition2] = useState([]);
   const [loading, setLoading] = useState(false);
   const [file, setFile] = useState(null);
+  const [fileId, setFileIforId] = useState("");
+  const [empInfor, setEmpInfor] = useState("");
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState(picture);
   const formatDate = "YYYY-MM-DD";
-  const getListDep = () => {
-    setLoading(true);
-    request("info/department/department", "get", {}).then((res) => {
+
+  const getListFile = (date) => {
+    request(
+      `files/ByEmIdAndTypeServiceDate?emId=${id}&type=1&date=${date}&service=1`,
+      "get",
+      {}
+    ).then((res) => {
       if (res) {
-        //console.log(res.data);
-        const arrTmpP = res.data.map((dep) => ({
-          label: dep.depName,
-          value: dep.depId,
-        }));
-        setLoading(false);
-        setDepartment(arrTmpP);
+        console.log(res);
+        if (res.length !== 0) {
+          setFileIforId(res[0].fileId);
+          setPreviewImage(res[0].url);
+        }
+        //setData(res);
       }
     });
   };
 
-  const onChangePos = (value) => {
-    if (!isEmptyOrNull(value)) {
-      const result = position2.find((item) => item.id === value);
-      form.setFieldsValue({
-        section: result.poSection,
-        mangerId: result.poLevel,
-      });
-    }
-  };
-
-  const onchangeDep = (value) => {
-    getListPos(value);
-  };
-
   const getListPos = (value) => {
-    setLoading(true);
     if (!isEmptyOrNull(value)) {
+      setLoading(true);
       request(
         "info/position/getPositionByDepId?depId=" + value,
         "get",
@@ -93,9 +82,67 @@ const PersonalDetailForm = () => {
     }
   };
 
+  const getEmpInfo = () => {
+    setLoading(true);
+    request("info/employee/getEmployeeById/" + id, "get", {}).then((res) => {
+      if (res) {
+        console.log(res.data);
+        setLoading(false);
+        var result = res.data;
+        setEmpInfor(result);
+      }
+    });
+  };
+
   useEffect(() => {
-      getListDep(); // Only fetch data when this tab is active
+    getEmpInfo();
+   // getListDep(); // Only fetch data when this tab is active
   }, []);
+
+  useEffect(() => {
+    if (empInfor) {
+      const departmentMatch = department.find(
+        (item) => item.label === empInfor.depId
+      );
+      if (departmentMatch && !isEmptyOrNull(departmentMatch.value)) {
+        getListPos(departmentMatch.value);
+      }
+      getListFile(empInfor.empDate);
+      // Setting form fields based on empInfor
+      form.setFieldsValue({
+        empId: empInfor.empId,
+        firstName: empInfor.firstName,
+        lastName: empInfor.lastName,
+        email: empInfor.email,
+        phone: empInfor.phone,
+        birthDate: empInfor.birthDate ? dayjs(empInfor.birthDate) : null,
+        placeOfBirth: empInfor.placeOfBirth,
+        age: empInfor.age,
+        gender: empInfor.sex,
+        height: empInfor.height,
+        address: empInfor.address,
+        empDate: empInfor.empDate ? dayjs(empInfor.empDate) : null,
+        joinDate: empInfor.joinDate ? dayjs(empInfor.joinDate) : null,
+        mangerId: empInfor.mangerId,
+        location: empInfor.location,
+        maritalStats: empInfor.maritalStats,
+        nationality: empInfor.nationality,
+        workType: empInfor.workType,
+        religion: empInfor.religion,
+        idCard: empInfor.idCard,
+        passportId: empInfor.passportId,
+        remark: empInfor.remark,
+        govOfficer: empInfor.govOfficer,
+        govTel: empInfor.govTel,
+        govAddress: empInfor.govAddress,
+        govPosition: empInfor.govPosition,
+        department: empInfor.depId,
+        position: empInfor.posId,
+        weight: empInfor.weight,
+        section: empInfor.section,
+      });
+    }
+  }, [empInfor]);
 
   const props = {
     name: "file",
@@ -134,11 +181,9 @@ const PersonalDetailForm = () => {
   };
 
   const onFinish = (item) => {
-    //console.log("success", item);
 
-    localStorage.setItem("employeeId", item.empId);
     const body = {
-      empId: item.empId,
+      empId: id,
       firstName: item.firstName,
       lastName: item.lastName,
       email: item.email,
@@ -149,24 +194,25 @@ const PersonalDetailForm = () => {
       sex: item.gender,
       height: item.height,
       address: item.address,
-      empDate: dateFormat(item.empDate),
-      joinDate: dateFormat(item.joinDat),
-      mangerId: item.mangerId,
+      empDate: null,
+      joinDate: "",
+      mangerId: "",
       location: item.location,
       maritalStats: item.maritalStats,
       nationality: item.nationality,
       workType: item.workType,
       religion: item.religion,
       idCard: item.idCard,
-      passport: item.passportId,
+      passport: item.passport,
       remark: item.remark,
       govOfficer: item.govOfficer,
       govTel: item.govTel,
       govAddress: item.govAddress,
       govPosition: item.govPosition,
-      depId: item.department,
-      posId: item.position,
+      depId: null,
+      posId: null,
       weight: item.weight,
+      fileId: fileId,
     };
     const formData = new FormData();
     const json = JSON.stringify(body);
@@ -179,7 +225,7 @@ const PersonalDetailForm = () => {
       formData.append("file", file);
     }
 
-    let url = "info/employee/addEmployee";
+    let url = "info/employee/user/editInfo";
     let method = "post";
 
     request(url, method, formData).then((res) => {
@@ -193,6 +239,7 @@ const PersonalDetailForm = () => {
           // confirmButtonText: "Confirm",
         });
         setLoading(false);
+        getEmpInfo();
       } else {
         Swal.fire({
           icon: "error",
@@ -207,6 +254,7 @@ const PersonalDetailForm = () => {
   return (
     <>
       <Spin spinning={loading} tip="Loading" size="middle">
+        <Title level={4}>Personal Imformation:</Title>
         <Form
           name="basic"
           initialValues={{
@@ -224,14 +272,8 @@ const PersonalDetailForm = () => {
               <Form.Item
                 name="empId"
                 label="Employee ID"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input the employee ID!",
-                  },
-                ]}
               >
-                <Input placeholder="Enter Employee ID!" />
+                <Input disabled placeholder="Enter Employee ID!" />
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -361,47 +403,28 @@ const PersonalDetailForm = () => {
               <Form.Item
                 name="workType"
                 label="Work Type"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input the employeeID!",
-                  },
-                ]}
               >
-                <Input placeholder="E.g., Full-time" />
+                <Input disabled placeholder="E.g., Full-time" />
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item
                 name="location"
                 label="Working Site"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input Working Site!",
-                  },
-                ]}
               >
-                <Input placeholder="E.g., New York Office" />
+                <Input disabled placeholder="E.g., New York Office" />
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item
                 name="department"
                 label="Department"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select Department!",
-                  },
-                ]}
               >
                 <Select
-                  showSearch
                   placeholder="Select a Department"
                   optionFilterProp="label"
                   options={department}
-                  onChange={onchangeDep}
+                  disabled
                 />
               </Form.Item>
             </Col>
@@ -409,20 +432,12 @@ const PersonalDetailForm = () => {
               <Form.Item
                 name="position"
                 label="Position"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select Position!",
-                  },
-                ]}
               >
                 <Select
-                  showSearch
+                  disabled
                   placeholder="Select a Position"
                   optionFilterProp="label"
                   options={position}
-                  allowClear
-                  onChange={onChangePos}
                 />
               </Form.Item>
             </Col>
@@ -430,19 +445,13 @@ const PersonalDetailForm = () => {
               <Form.Item
                 name="mangerId"
                 label="Position Level"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input Position Level!",
-                  },
-                ]}
               >
-                <Input />
+                <Input disabled/>
               </Form.Item>
             </Col>
             <Col span={8}>
               <Form.Item name="section" label="Section">
-                <Input placeholder="E.g., HR" />
+                <Input disabled placeholder="E.g., HR" />
               </Form.Item>
             </Col>
 
@@ -450,14 +459,9 @@ const PersonalDetailForm = () => {
               <Form.Item
                 name="joinDate"
                 label="Join Date"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select Start Date!",
-                  },
-                ]}
               >
                 <DatePicker
+                  disabled
                   placeholder="Select Start Date"
                   style={{ width: "100%" }}
                 />
@@ -467,14 +471,9 @@ const PersonalDetailForm = () => {
               <Form.Item
                 name="empDate"
                 label="End Date"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select Stop Date!",
-                  },
-                ]}
               >
                 <DatePicker
+                  disabled
                   placeholder="Select Stop Date"
                   style={{ width: "100%" }}
                 />
@@ -564,21 +563,12 @@ const PersonalDetailForm = () => {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item
-                name="idCardNo"
-                label="ID Card No."
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input ID Card No.! ",
-                  },
-                ]}
-              >
+              <Form.Item name="idCardNo" label="ID Card No.">
                 <Input placeholder="E.g., 123456789" />
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item name="passportId" label="Passport ID">
+              <Form.Item name="passport" label="Passport ID">
                 <Input placeholder="E.g., P12345678" />
               </Form.Item>
             </Col>
@@ -600,7 +590,11 @@ const PersonalDetailForm = () => {
             </Col>
             <Col span={18}>
               <Form.Item name="upload">
-                <Dragger {...props} style={{ height: 50 }}>
+                <Dragger
+                  onPreview={handlePreview}
+                  {...props}
+                  style={{ height: "100%" }}
+                >
                   <p className="ant-upload-drag-icon">
                     <InboxOutlined />
                   </p>
@@ -643,7 +637,6 @@ const PersonalDetailForm = () => {
 
           <Form.Item>
             <Space>
-              <Button danger>Cancel</Button>
               <Button type="primary" htmlType="submit">
                 Save
               </Button>

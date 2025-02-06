@@ -1,34 +1,14 @@
 import React, { useState, useEffect } from "react";
 import {
-  Form,
-  Input,
+
   Table,
-  Row,
-  Col,
-  DatePicker,
-  Divider,
-  Typography,
-  Select,
-  Image,
   Spin,
 } from "antd";
 import { request } from "../../../share/request";
-import { isEmptyOrNull } from "../../../share/helper";
-import dayjs from "dayjs";
-const { TextArea } = Input;
-const { Title } = Typography;
 const picture = require("../../../asset/image/missing-picture.jpg");
 const PersonalDetailFormView = ({ id }) => {
-  const [form] = Form.useForm();
-  const [department, setDepartment] = useState([]);
-  const [position, setPosition] = useState([]);
-  const [position2, setPosition2] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [fileId, setFileIforId] = useState("");
   const [empInfor, setEmpInfor] = useState("");
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImage, setPreviewImage] = useState(picture);
-
   const columns = [
     {
       title: "Employee ID",
@@ -72,43 +52,6 @@ const PersonalDetailFormView = ({ id }) => {
       dataIndex: "remark",
     },
   ];
-  const getListFile = (date) => {
-    request(
-      `files/ByEmIdAndTypeServiceDate?emId=${id}&type=1&date=${date}&service=1`,
-      "get",
-      {}
-    ).then((res) => {
-      if (res) {
-        if (res.length !== 0) {
-          setFileIforId(res[0].fileId);
-          setPreviewImage(res[0].url);
-        }
-        //setData(res);
-      }
-    });
-  };
-
-  const getListPos = (value) => {
-    if (!isEmptyOrNull(value)) {
-      setLoading(true);
-      request(
-        "info/position/getPositionByDepId?depId=" + value,
-        "get",
-        {}
-      ).then((res) => {
-        if (res) {
-          const arrTmpP = res.data.map((dep) => ({
-            label: dep.posName,
-            value: dep.id,
-          }));
-          setPosition(arrTmpP);
-          setPosition2(res.data);
-          setLoading(false);
-        }
-      });
-    }
-  };
-
   const getEmpInfo = () => {
     setLoading(true);
     request("info/employee/getEmployeeById/" + id, "get", {}).then((res) => {
@@ -126,51 +69,6 @@ const PersonalDetailFormView = ({ id }) => {
     // getListDep(); // Only fetch data when this tab is active
   }, []);
 
-  useEffect(() => {
-    if (empInfor) {
-      const departmentMatch = department.find(
-        (item) => item.label === empInfor.depId
-      );
-      if (departmentMatch && !isEmptyOrNull(departmentMatch.value)) {
-        console.log(departmentMatch);
-        getListPos(departmentMatch.value);
-      }
-      getListFile(empInfor.empDate);
-      // Setting form fields based on empInfor
-      form.setFieldsValue({
-        empId: empInfor.empId,
-        firstName: empInfor.firstName,
-        lastName: empInfor.lastName,
-        email: empInfor.email,
-        phone: empInfor.phone,
-        birthDate: empInfor.birthDate ? dayjs(empInfor.birthDate) : null,
-        placeOfBirth: empInfor.placeOfBirth,
-        age: empInfor.age,
-        gender: empInfor.sex,
-        height: empInfor.height,
-        address: empInfor.address,
-        empDate: empInfor.empDate ? dayjs(empInfor.empDate) : null,
-        joinDate: empInfor.joinDate ? dayjs(empInfor.joinDate) : null,
-        mangerId: empInfor.mangerId,
-        location: empInfor.location,
-        maritalStats: empInfor.maritalStats,
-        nationality: empInfor.nationality,
-        workType: empInfor.workType,
-        religion: empInfor.religion,
-        idCard: empInfor.idCard,
-        passportId: empInfor.passportId,
-        remark: empInfor.remark,
-        govOfficer: empInfor.govOfficer,
-        govTel: empInfor.govTel,
-        govAddress: empInfor.govAddress,
-        govPosition: empInfor.govPosition,
-        department: empInfor.depId,
-        position: empInfor.posId,
-        weight: empInfor.weight,
-        section: empInfor.section,
-      });
-    }
-  }, [empInfor]);
 
   return (
     <>

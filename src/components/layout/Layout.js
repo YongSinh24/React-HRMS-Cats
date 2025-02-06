@@ -31,7 +31,7 @@ const Whitelogo = require("../../asset/image/CatsWhiteLogo.png");
 
 const items = [
   getItem("Home", "/home", <PieChartOutlined />),
-  getItem("Personal info", "/personal-info", <UserOutlined />),
+  getItem("Personal Info", "/personal-info", <UserOutlined />),
   getItem("Attendance", "/Attendance", <FieldTimeOutlined />),
   getItem("Info Management", "Management", <TeamOutlined />, [
     getItem("Department", "/Department", <BankOutlined />),
