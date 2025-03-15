@@ -21,16 +21,13 @@ import LeaveEmpPage from "./pages/leavePage/LeaveEmp/LeaveEmp";
 import PositionPage from "./pages/PositionPage/Position";
 import EidtPayslipPage from "./pages/Payslip/edtPayslipPage";
 import StaffForm from "./pages/StaffPage/StaffForm";
-import PersonalReport from "./pages/Report/PersonalReport";
 import UserTabsAttendance from "./pages/AttendancePage/UserTabsAttendance";
 import UserLeave from "./pages/leavePage/UserLeave/UserLeave";
-import UserAttendance from "./pages/AttendancePage/tab/UserAttendance";
 import LeaveForMange from "./pages/leavePage/LeaveForMange/leaveMangePage";
 import StaffEditForm from "./pages/StaffEditPage/StaffForm";
 import UserLayout from "./components/layout-user/Layout";
 import EmployeeView from "./pages/EmployeeView/StaffForm";
 import RenderOnRole from "./UserService/RenderOnRole";
-import WebSocketComponent from "./pages/WebSocketComponent/WebSocketComponent";
 import "./App.css";
 import "antd/dist/antd"; // or 'antd/dist/antd.less'
 import "antd-button-color/dist/css/style.css"; // or 'antd-button-color/dist/css/style.less'
@@ -42,7 +39,6 @@ function App() {
   useEffect(() => {
     if (userRoles.includes("hrms_user")) {
       setUrl("/user/home");
-      // window.location.href = "http://localhost:3005/user/employee";
     } else {
       setUrl("/home");
     }

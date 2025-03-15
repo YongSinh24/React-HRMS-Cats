@@ -11,7 +11,6 @@ import {
   Table,
   Button,
   Form,
-  Select,
   Col,
   Row,
   Divider,
@@ -22,7 +21,6 @@ import {
 } from "antd";
 import {
   SendOutlined,
-  SaveOutlined,
   DeleteFilled,
   EditOutlined,
   EyeFilled,

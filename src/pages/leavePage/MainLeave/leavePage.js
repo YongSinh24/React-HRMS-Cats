@@ -2,9 +2,7 @@ import "./leavePage.css";
 import { Button, Space, DatePicker, Table, Badge } from "antd";
 import {
   SearchOutlined,
-  ExportOutlined,
   EyeFilled,
-  EditFilled,
   CloseOutlined,
   CheckOutlined,
 } from "@ant-design/icons";
@@ -17,13 +15,6 @@ import Drawerleave from "./Drawer";
 import getColumnSearchProps from "../../../share/ColumnSearchProps";
 const { RangePicker } = DatePicker;
 
-const onSearch = (value) => {
-  console.log("search:", value);
-};
-
-// Filter `option.label` match the user type `input`
-const filterOption = (input, option) =>
-  (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
 const LeavePage = () => {
   const [loading, setLoading] = useState(false);

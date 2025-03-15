@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import Notification from "../../components/notetification/notetification";
 const WebSocketComponent = () => {
   const [messages, setMessages] = useState([]);

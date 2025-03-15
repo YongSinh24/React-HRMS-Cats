@@ -7,8 +7,8 @@ export function getLocalAccessToken() {
 }
 
 export const config = {
-  base_server: "https://192.168.0.112:8085/api/",
-  //base_server: "https://localhost:8085/api/",
+  //base_server: "https://192.168.0.112:8085/api/",
+  base_server: "https://localhost:8085/api/",
   image_path: "",
   version: 1,
 };

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { DownOutlined, LoginOutlined, LogoutOutlined } from "@ant-design/icons";
-import { Dropdown, Space, Avatar } from "antd";
+import React from "react";
+import { DownOutlined, LogoutOutlined } from "@ant-design/icons";
+import { Dropdown, Avatar } from "antd";
 import UserService from "../../UserService/UserService";
 
 
@@ -51,20 +51,6 @@ const MenuItems = () => {
     <>
       <div>
         <div>
-          {/* <Tooltip title="Notification" arrow>
-            <Badge
-              badgeContent={100}
-              sx={{
-                "& .MuiBadge-badge": {
-                  color: "white",
-                  backgroundColor: "red",
-                },
-              }}
-              //style={badgeStyles}
-            >
-              <MdOutlineNotificationsActive size={28} />
-            </Badge>
-          </Tooltip> */}
           <Dropdown
             menu={{
               items: menuUser,

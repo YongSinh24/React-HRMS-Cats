@@ -8,13 +8,11 @@ import {
   Button,
   Space,
   Select,
-  Popconfirm,
   Spin,
 } from "antd";
 import React, { useState, useEffect } from "react";
-import { isEmptyOrNull, dateFormat } from "../../../share/helper";
 import { request } from "../../../share/request";
-import { DeleteOutlined, EditFilled } from "@ant-design/icons";
+import { EditFilled } from "@ant-design/icons";
 import Swal from "sweetalert2";
 
 const SpecialAbility = ({ id }) => {

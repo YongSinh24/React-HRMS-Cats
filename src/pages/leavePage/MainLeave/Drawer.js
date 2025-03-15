@@ -16,7 +16,6 @@ import Editor from "../Editor/Editor";
 import dayjs from "dayjs";
 import { FileOutlined } from "@ant-design/icons";
 import { request } from "../../../share/request";
-import { isEmptyOrNull } from "../../../share/helper";
 const { RangePicker } = DatePicker;
 const Drawerleave = ({ open = false, onClose, items }) => {
   const [form] = Form.useForm();

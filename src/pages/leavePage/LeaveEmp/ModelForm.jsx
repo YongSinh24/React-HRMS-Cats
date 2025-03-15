@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   Modal,
@@ -11,7 +11,6 @@ import {
   Input,
 } from "antd";
 import { SaveFilled } from "@ant-design/icons";
-import { request } from "../../../share/request";
 import dayjs from "dayjs";
 export default function ModelForm({
   open = false,
@@ -23,7 +22,6 @@ export default function ModelForm({
   edit = false,
 }) {
   const [form] = Form.useForm();
-  const [emp, setEmp] = useState([]);
 
   const handleCancel = () => {
     form.resetFields(); // clear data in form

@@ -35,12 +35,10 @@ const Drawerleave = ({
   items,
   fileId,
 }) => {
-  const [file, setFile] = useState(null);
+  // const [file, setFile] = useState(null);
   const [isHalfDay, setIsHalfDay] = useState(false);
   const [duration, setDuration] = useState(0.5);
   const [form] = Form.useForm();
-  const [end, setEndDate] = useState("");
-  const [start, setStartDate] = useState("");
   const [data, setData] = useState([]);
 
   const onChangeDuration = (value) => {
@@ -75,8 +73,6 @@ const Drawerleave = ({
   useEffect(() => {
     if (edit) {
       getListFile();
-      setEndDate(dayjs(items.startDate));
-      setStartDate(dayjs(items.endDate));
       form.setFieldsValue({
         id: items.empId,
         leaveType: items.leaveType,
@@ -96,14 +92,14 @@ const Drawerleave = ({
     multiple: false, // Disable multiple uploads, can be enabled if needed
     beforeUpload: (file) => {
       // Before the file is uploaded, store it in the state
-      setFile(file);
+      // setFile(file);
       message.success(`${file.name} file is ready for upload.`);
       return false;
     },
     onChange(info) {
       const { status } = info.file;
       if (status === "removed") {
-        setFile(null);
+        // setFile(null);
         message.info("File removed.");
       }
     },
@@ -116,14 +112,13 @@ const Drawerleave = ({
     onClose();
     form.resetFields(); // clear data in form
   };
-  const isEmptyOrNull2 = (date) =>
-    !date || date.length !== 2 || !date[0] || !date[1];
-  const onChangeDate = (value, dataSrting) => {
-    if (!isEmptyOrNull2(value)) {
-      setEndDate(value[1]);
-      setStartDate(value[0]);
-    }
-  };
+
+  // const onChangeDate = (value, dataSrting) => {
+  //   if (!isEmptyOrNull2(value)) {
+  //     setEndDate(value[1]);
+  //     setStartDate(value[0]);
+  //   }
+  // };
 
   const onChangeTime = (time, timeString) => {
     console.log(time, timeString);
@@ -183,15 +178,10 @@ const Drawerleave = ({
                 ]}
               >
                 <DatePicker.RangePicker
-                  onChange={onChangeDate}
+                  //onChange={onChangeDate}
                   style={{
                     width: "100%",
                   }}
-                  // value={[
-                  //   dayjs(start, dateFormat),
-                  //   dayjs(end, dateFormat),
-                  // ]}
-                  // format={dateFormat}
                 />
               </Form.Item>
             </Col>

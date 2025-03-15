@@ -1,9 +1,7 @@
 import { Button, Space, DatePicker, Table, Badge } from "antd";
 import {
   SearchOutlined,
-  ExportOutlined,
   EyeFilled,
-  EditFilled,
   CloseOutlined,
   CheckOutlined,
 } from "@ant-design/icons";
@@ -47,36 +45,36 @@ const LeaveForMange = () => {
     });
   };
 
-  const onReject = (value) => {
-    //approveOrRejectByHead
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, Reject it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        request(
-          `attendanceLeave/leave/approveOrRejectByManger?id=${value.id}&reject=true`,
-          "put",
-          {}
-        ).then((res) => {
-          if (res) {
-            Swal.fire({
-              title: "Rejected!",
-              text: "Your file has been rejected.",
-              icon: "success",
-            });
-            getList();
-            setLoading(false);
-          }
-        });
-      }
-    });
-  };
+  // const onReject = (value) => {
+  //   //approveOrRejectByHead
+  //   Swal.fire({
+  //     title: "Are you sure?",
+  //     text: "You won't be able to revert this!",
+  //     icon: "warning",
+  //     showCancelButton: true,
+  //     confirmButtonColor: "#3085d6",
+  //     cancelButtonColor: "#d33",
+  //     confirmButtonText: "Yes, Reject it!",
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       request(
+  //         `attendanceLeave/leave/approveOrRejectByManger?id=${value.id}&reject=true`,
+  //         "put",
+  //         {}
+  //       ).then((res) => {
+  //         if (res) {
+  //           Swal.fire({
+  //             title: "Rejected!",
+  //             text: "Your file has been rejected.",
+  //             icon: "success",
+  //           });
+  //           getList();
+  //           setLoading(false);
+  //         }
+  //       });
+  //     }
+  //   });
+  // };
 
   const handleApprovalAction = (value, actionType, role) => {
     const endpoint =

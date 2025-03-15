@@ -7,7 +7,6 @@ import {
   Image,
   Space,
   Table,
-  Tag,
   Button,
   Spin,
   Form,
@@ -31,7 +30,6 @@ const { Title } = Typography;
 const picture = require("../../../asset/image/missing-picture.jpg");
 
 const LeaveEmpPage = () => {
-  const now = Date.now();
   const [leaveType, setLeaveType] = useState([]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);

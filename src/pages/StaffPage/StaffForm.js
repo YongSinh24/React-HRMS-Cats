@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Collapse, Tabs, message } from "antd";
+import React from "react";
+import { Collapse } from "antd";
 import PersonalDetailForm from "./Form/PersonalDetailForm";
 import HistoryForm from "./Form/HistoryForm";
 import FamilyDataForm from "./Form/FamilyDataForm";
@@ -47,17 +47,10 @@ const StaffForm = () => {
       <Collapse
         items={items}
         defaultActiveKey={["1"]}
-       // onChange={(key) => setActiveKey(key)}
+      // onChange={(key) => setActiveKey(key)}
       />
-      {/* <Tabs
-        defaultActiveKey="1"
-        type="card"
-        size={"large"}
-        items={items}
-        onChange={(key) => setActiveKey(key)} // Update activeKey when tab changes
-      /> */}
     </>
   );
-};
+}; 
 
 export default StaffForm;
