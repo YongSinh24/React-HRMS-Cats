@@ -5,7 +5,6 @@ import {
   Row,
   Col,
   Spin,
-  Typography,
   Button,
   Space,
   DatePicker,
@@ -13,45 +12,23 @@ import {
   Divider
 } from "antd";
 import { isEmptyOrNull, dateFormat } from "../../../share/helper";
-import { request, request2 } from "../../../share/request";
+import { request } from "../../../share/request";
 import Swal from "sweetalert2";
-const { Title } = Typography;
 
 const HistoryForm = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
-  const [empId, setEmpId] = useState("");
   const [data, setData] = useState([]);
   const [submittedId, setSubmittedId] = useState(null);
 
   useEffect(() => {
     const storedId = localStorage.getItem("employeeId");
-        setSubmittedId(storedId);
-        getEmpInfo(storedId);
+    if(!isEmptyOrNull(storedId)){
+      setSubmittedId(storedId);
+      getEmpInfo(storedId);
+    }
        // Retrieve employee ID from local storage when the component mounts
   }, []);
-
-
-
-  const text =()=>{
-      Swal.fire({
-        title: "Enter your IP address",
-        input: "text",
-        inputLabel: "Your IP address",
-        inputValue: '',
-        showCancelButton: true,
-        inputValidator: (value) => {
-          if (!value) {
-            return "You need to input employee id!";
-          }
-        }
-      }).then((result) => {
-        if (result.isConfirmed && result.value) {
-          const ipAddress = result.value;
-          Swal.fire(`Your IP address is ${ipAddress}`);
-        }
-      });
-  }
 
 
   const save = (body) => {

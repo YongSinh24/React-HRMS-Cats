@@ -8,7 +8,7 @@ export const config = {
   base_keyclock: `http://localhost:8080`,
   //base_webSocket:`http://localhost:8089/ws`,
   //base_keyclock: `http://192.168.0.112:8080`,
-  base_webSocket:`http://192.168.0.112:8089/ws`,
+  base_webSocket:`http://localhost:8089/ws`,
   version: 1,
 };
 
